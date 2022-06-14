@@ -614,7 +614,7 @@ func NewSimApp(
 					// is the same as the current DenomTrace.
 					// If it isn't then store the new DenomTrace in the list of new traces.
 					newTrace := ibctransfertypes.ParseDenomTrace(dt.GetFullDenomPath())
-					if err := newTrace.Validate(); err == nil && !reflect.DeepEqual(newTrace, dt) {
+					if err := newTrace.Validate(); err == nil && !equalTraces(newTrace, dt) {
 						newTraces = append(newTraces, newTrace)
 					}
 
@@ -845,4 +845,8 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 
 	return paramsKeeper
+}
+
+func equalTraces(dtA, dtB ibctransfertypes.DenomTrace) bool {
+    	return dtA.BaseDenom == dtB.BaseDenom && dtA.Path == dtB.Path
 }
