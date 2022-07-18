@@ -15,6 +15,7 @@ const (
 	AttributeKeyHeader            = "header"
 	AttributeKeyUpgradePlanTitle  = "title"
 	AttributeKeyUpgradePlanHeight = "height"
+	AttributeKeyUpgradeStore      = "store"
 )
 
 // IBC client events vars
@@ -25,6 +26,7 @@ var (
 	EventTypeSubmitMisbehaviour    = "client_misbehaviour"
 	EventTypeUpdateClientProposal  = "update_client_proposal"
 	EventTypeUpgradeClientProposal = "upgrade_client_proposal"
+	EventTypeUpgradeChain          = "upgrade_chain"
 
 	AttributeValueCategory = fmt.Sprintf("%s_%s", host.ModuleName, SubModuleName)
 )
