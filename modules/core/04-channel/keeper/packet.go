@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"bytes"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -135,6 +136,7 @@ func (k Keeper) SendPacket(
 		"src_channel", packet.GetSourceChannel(),
 		"dst_port", packet.GetDestPort(),
 		"dst_channel", packet.GetDestChannel(),
+		"data", fmt.Sprintf("%X", packet.GetData()),
 	)
 
 	return nil
