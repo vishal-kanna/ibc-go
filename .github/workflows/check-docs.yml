@@ -1,17 +1,26 @@
-name: "Delete old images"
+name: Check docs build
+# This workflow runs when a PR is labeled with `docs`
+# This will check if the docs build successfully by running `npm run build`
 on:
-  push:
-  workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * 0" # runs every week on Sunday
-
-env:
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  pull_request:
+    paths:
+      - './docs'
 
 jobs:
-  delete-images:
+  check-docs-build:
+    if: ${{ github.event.label.name == 'docs' }}
+
+    name: Check docs build
     runs-on: ubuntu-latest
     steps:
-      - name: "delete images"
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Install dependencies and build docs 🧱
         run: |
-          gh api -X GET /orgs/cosmos/packages/container/ibc-go-simd/versions | jq -r .[].metadata.container.tags[]
+          cd docs
+          npm install
+          npm run build
