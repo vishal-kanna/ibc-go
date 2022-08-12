@@ -98,8 +98,8 @@ func getIdsToDelete(packages []GithubPackageEntry) Result {
 			continue
 		}
 		tag := entry.MetaData.Container.Tags[0]
-		lastWeek := time.Now().AddDate(0, 0, -1)
-		if strings.HasPrefix(tag, prTagPrefix) && entry.CreatedAt.Before(lastWeek) {
+		lastWeek := time.Now().AddDate(0, 0, -7)
+		if strings.HasPrefix(tag, prTagPrefix) && entry.CreatedAt.After(lastWeek) {
 			fmt.Println("deleting: " + tag)
 			idsToDelete = append(idsToDelete, entry.ID)
 			continue
