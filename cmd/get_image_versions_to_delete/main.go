@@ -79,6 +79,13 @@ func main() {
 		os.Exit(1)
 	}
 
+	for _, e := range githubPackages {
+		fmt.Println(e.ID)
+		if len(e.MetaData.Container.Tags) == 1 {
+			fmt.Println(e.MetaData.Container.Tags[0])
+		}
+	}
+
 	fmt.Println(githubPackages)
 
 	result := getIdsToDelete(githubPackages)
@@ -93,18 +100,15 @@ func main() {
 func getIdsToDelete(packages []GithubPackageEntry) Result {
 	var idsToDelete []int
 	for _, entry := range packages {
-		fmt.Println(entry)
 		if len(entry.MetaData.Container.Tags) != 1 {
 			continue
 		}
 		tag := entry.MetaData.Container.Tags[0]
 		lastWeek := time.Now().AddDate(0, 0, -7)
 		if strings.HasPrefix(tag, prTagPrefix) && entry.CreatedAt.Before(lastWeek) {
-			fmt.Println("deleting: " + tag)
 			idsToDelete = append(idsToDelete, entry.ID)
 			continue
 		}
-		fmt.Println("not deleting: " + tag)
 	}
 	return Result{IDsToDelete: idsToDelete}
 }
