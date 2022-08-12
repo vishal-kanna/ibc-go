@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 	"time"
 )
@@ -58,22 +59,20 @@ type Result struct {
 	IDsToDelete []int `json:"ids_to_delete"`
 }
 
-func readGHOutput() string {
-	out, ok := os.LookupEnv("GH_OUTPUT")
-	if !ok {
-		return ""
-	}
-	return out
+func fetchGithubPackages() ([]byte, error) {
+	cmd := exec.Command("gh", "api", "-X", "GET", "/orgs/cosmos/packages/container/ibc-go-simd/versions")
+	return cmd.CombinedOutput()
 }
 
 func main() {
-	//if len(os.Args) != 2 {
-	//	fmt.Println("expected string as input but not was given")
-	//	os.Exit(1)
-	//}
+	githubPackagesBytes, err := fetchGithubPackages()
+	if err != nil {
+		fmt.Printf("failed to fetch packages: %s\n", err.Error())
+		os.Exit(1)
+	}
 
 	var githubPackages []GithubPackageEntry
-	if err := json.Unmarshal([]byte(readGHOutput()), &githubPackages); err != nil {
+	if err := json.Unmarshal(githubPackagesBytes, &githubPackages); err != nil {
 		//if err := json.Unmarshal([]byte(os.Args[1]), &githubPackages); err != nil {
 		fmt.Printf("failed to unmarshal packages: %s\n", err.Error())
 		os.Exit(1)

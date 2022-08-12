@@ -18,10 +18,9 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: 1.18
-      - name: "Fetch images"
-        id: fetch-all-images
-        run: echo "::set-output name=versions-to-delete::$(gh api -X GET /orgs/cosmos/packages/container/ibc-go-simd/versions | jq -c)"
+#      - name: "Fetch images"
+#        id: fetch-all-images
+#        run: echo "::set-output name=versions-to-delete::$(gh api -X GET /orgs/cosmos/packages/container/ibc-go-simd/versions | jq -c)"
       - name: "Get images to delete"
-        run: go run cmd/get_image_versions_to_delete/main.go "${{ steps.fetch-all-images.outputs.versions-to-delete }}"
-        env:
-          GH_OUTPUT: "${{ steps.fetch-all-images.outputs.versions-to-delete }}"
+        run: go run cmd/get_image_versions_to_delete/main.go
+
