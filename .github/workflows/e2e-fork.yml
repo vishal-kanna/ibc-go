@@ -6,6 +6,8 @@ on:
       - main
     paths-ignore:
       - docs/**
+      - "**.md"
+      - LICENSE
 
 jobs:
   # dynamically build a matrix of test/test suite pairs to run
