@@ -60,7 +60,7 @@ type Result struct {
 }
 
 func fetchGithubPackages() ([]byte, error) {
-	cmd := exec.Command("gh", "api", "-X", "GET", "/orgs/cosmos/packages/container/ibc-go-simd/versions")
+	cmd := exec.Command("gh", "api", "-X", "GET", "/orgs/cosmos/packages/container/ibc-go-simd-e2e/versions")
 	return cmd.CombinedOutput()
 }
 
