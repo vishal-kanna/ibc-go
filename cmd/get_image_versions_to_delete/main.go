@@ -71,6 +71,8 @@ func main() {
 		os.Exit(1)
 	}
 
+	fmt.Println(string(githubPackagesBytes))
+
 	var githubPackages []GithubPackageEntry
 	if err := json.Unmarshal(githubPackagesBytes, &githubPackages); err != nil {
 		//if err := json.Unmarshal([]byte(os.Args[1]), &githubPackages); err != nil {
