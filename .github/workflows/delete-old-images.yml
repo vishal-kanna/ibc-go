@@ -1,26 +1,39 @@
 name: "Delete old images"
 on:
   push:
-  workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * 0" # runs every week on Sunday
+#  workflow_dispatch:
+#  schedule:
+#    - cron: "0 0 * * 0" # runs every week on Sunday
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-jobs:
-  delete-images:
-    runs-on: ubuntu-latest
-    outputs:
-      versions-to-delete: ${{ steps.fetch-all-images.outputs.versions-to-delete }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
-        with:
-          go-version: 1.18
-#      - name: "Fetch images"
-#        id: fetch-all-images
-#        run: echo "::set-output name=versions-to-delete::$(gh api -X GET /orgs/cosmos/packages/container/ibc-go-simd/versions | jq -c)"
-      - name: "Get images to delete"
-        run: go run cmd/get_image_versions_to_delete/main.go
+#jobs:
+#  delete-image:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: "Delete image"
+#        run: gh api -X GET /orgs/cosmos/packages/container/ibc-go-simd/versions"
+#
 
+#name: '[RM] Preview'
+
+#on:
+#  pull_request:
+#    types: [closed]
+
+jobs:
+  purge-image:
+    name: Delete image from ghcr.io
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete image
+        uses: bots-house/ghcr-delete-image-action@v1.0.0
+        with:
+          # NOTE: at now only orgs is supported
+          owner: cosmos
+          name: ibc-go-simd-e2e
+          # NOTE: using Personal Access Token
+#          token: ${{ secrets.PAT }}
+#          tag: pr-${{github.event.pull_request.number}}
+          tag: pr-1882
