@@ -75,10 +75,11 @@ func main() {
 
 	var githubPackages []GithubPackageEntry
 	if err := json.Unmarshal(githubPackagesBytes, &githubPackages); err != nil {
-		//if err := json.Unmarshal([]byte(os.Args[1]), &githubPackages); err != nil {
 		fmt.Printf("failed to unmarshal packages: %s\n", err.Error())
 		os.Exit(1)
 	}
+
+	fmt.Println(githubPackages)
 
 	result := getIdsToDelete(githubPackages)
 
