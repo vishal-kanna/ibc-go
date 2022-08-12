@@ -22,6 +22,6 @@ jobs:
         id: fetch-all-images
         run: echo "::set-output name=versions-to-delete::$(gh api -X GET /orgs/cosmos/packages/container/ibc-go-simd/versions)"
       - name: "Get images to delete"
-        run: go run cmd/get_image_versions_to_delete/main.go
+        run: go run cmd/get_image_versions_to_delete/main.go "${{ steps.fetch-all-images.outputs.versions-to-delete }}"
         env:
           GH_OUTPUT: "${{ steps.fetch-all-images.outputs.versions-to-delete }}"
