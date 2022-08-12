@@ -58,14 +58,22 @@ type Result struct {
 	IDsToDelete []int `json:"ids_to_delete"`
 }
 
-func main() {
-	if len(os.Args) != 2 {
-		fmt.Println("expected string as input but not was given")
-		os.Exit(1)
+func readGHOutput() string {
+	out, ok := os.LookupEnv("GH_OUTPUT")
+	if !ok {
+		return ""
 	}
+	return out
+}
+
+func main() {
+	//if len(os.Args) != 2 {
+	//	fmt.Println("expected string as input but not was given")
+	//	os.Exit(1)
+	//}
 
 	var githubPackages []GithubPackageEntry
-	if err := json.Unmarshal([]byte(os.Args[1]), &githubPackages); err != nil {
+	if err := json.Unmarshal([]byte(readGHOutput()), &githubPackages); err != nil {
 		fmt.Printf("failed to unmarshal packages: %s\n", err.Error())
 		os.Exit(1)
 	}
