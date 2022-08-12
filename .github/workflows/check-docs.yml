@@ -14,4 +14,4 @@ jobs:
     steps:
       - name: "delete images"
         run: |
-          gh api -X GET /orgs/cosmos/packages/container/ibc-go-simd/versions | jq
+          gh api -X GET /orgs/cosmos/packages/container/ibc-go-simd/versions | jq -r .[].metadata.container.tags[]
