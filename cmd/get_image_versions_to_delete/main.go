@@ -104,6 +104,7 @@ func getIdsToDelete(packages []GithubPackageEntry) Result {
 			idsToDelete = append(idsToDelete, entry.ID)
 			continue
 		}
+		fmt.Println("not deleting: " + tag)
 	}
 	return Result{IDsToDelete: idsToDelete}
 }
