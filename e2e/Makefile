@@ -8,6 +8,6 @@ cleanup-ibc-test-containers:
 	done
 
 e2e-test: cleanup-ibc-test-containers
-	./scripts/run-e2e.sh $(suite) $(test)
+	./scripts/run-e2e.sh $(suite) $(test) $(binary)
 
 .PHONY: cleanup-ibc-test-containers e2e-test

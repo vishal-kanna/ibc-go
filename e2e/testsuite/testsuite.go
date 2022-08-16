@@ -235,7 +235,7 @@ func (s *E2ETestSuite) StopRelayer(ctx context.Context, relayer ibc.Relayer) {
 
 // StopRelayer stops the given relayer.
 func (s *E2ETestSuite) GetRelayerExecReporter() ibc.RelayerExecReporter {
-	return s.getRelayerExecReporter()	
+	return s.getRelayerExecReporter()
 }
 
 // CreateUserOnChainA creates a user with the given amount of funds on chain A.
@@ -303,6 +303,13 @@ func (s *E2ETestSuite) AssertValidTxResponse(resp sdk.TxResponse) {
 	s.Require().NotEqual(int64(0), resp.GasWanted, respLogsMsg)
 	s.Require().NotEmpty(resp.Events, respLogsMsg)
 	s.Require().NotEmpty(resp.Data, respLogsMsg)
+}
+
+// AssertPacketRelayed asserts that the packet commitment does not exist on the sending chain.
+// The packet commitment will be deleted upon a packet acknowledgement or timeout.
+func (s *E2ETestSuite) AssertPacketRelayed(ctx context.Context, chain *cosmos.CosmosChain, portID, channelID string, sequence uint64) {
+	commitment, _ := s.QueryPacketCommitment(ctx, chain, portID, channelID, sequence)
+	s.Require().Empty(commitment)
 }
 
 // createCosmosChains creates two separate chains in docker containers.

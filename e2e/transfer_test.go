@@ -1,5 +1,3 @@
-//go:build simd
-
 package e2e
 
 /*

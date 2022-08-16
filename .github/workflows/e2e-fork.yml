@@ -24,8 +24,8 @@ jobs:
 
   e2e:
     env:
-      CHAIN_A_SIMD_TAG: latest
-      CHAIN_A_SIMD_IMAGE: ibc-go-simd
+      CHAIN_A_TAG: latest
+      CHAIN_A_IMAGE: ibc-go-simd
     if: ${{ github.event.pull_request.head.repo.fork || github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch' }}
     needs:
       - build-test-matrix
@@ -47,4 +47,4 @@ jobs:
           RLY_TAG: "v2.0.0-rc2"
         run: |
           cd e2e
-          make e2e-test suite=${{ matrix.suite }} test=${{ matrix.test }}
+          make e2e-test suite=${{ matrix.suite }} test=${{ matrix.test }} binary=${{ matrix.binary }}

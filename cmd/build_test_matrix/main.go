@@ -13,20 +13,26 @@ import (
 )
 
 const (
-	testNamePrefix     = "Test"
-	testFileNameSuffix = "_test.go"
-	e2eTestDirectory   = "e2e"
-	testEntryPointEnv  = "TEST_ENTRYPOINT"
+	testNamePrefix               = "Test"
+	testFileNameSuffix           = "_test.go"
+	e2eTestDirectory             = "e2e"
+	testEntryPointEnv            = "TEST_ENTRYPOINT"
+	simdBinaryName               = "simd"
+	interchainAccountsBinaryName = "icad"
+	// interchainAccountsTestFunctionName specifies the name of the function which runs interchain accounts
+	// tests. This name is used to determine if icad should be used as the binary for tests.
+	interchainAccountsTestFunctionName = "TestInterchainAccountsTestSuite"
 )
 
 // GithubActionTestMatrix represents
 type GithubActionTestMatrix struct {
-	Include []TestSuitePair `json:"include"`
+	Include []TestSuiteValues `json:"include"`
 }
 
-type TestSuitePair struct {
-	Test  string `json:"test"`
-	Suite string `json:"suite"`
+type TestSuiteValues struct {
+	Test   string `json:"test"`
+	Suite  string `json:"suite"`
+	Binary string `json:"binary"`
 }
 
 func main() {
@@ -91,14 +97,20 @@ func getGithubActionMatrixForTests(e2eRootDirectory, suite string) (GithubAction
 	}
 
 	gh := GithubActionTestMatrix{
-		Include: []TestSuitePair{},
+		Include: []TestSuiteValues{},
 	}
 
 	for testSuiteName, testCases := range testSuiteMapping {
+		binary := simdBinaryName
+		if testSuiteName == interchainAccountsTestFunctionName {
+			binary = interchainAccountsBinaryName
+		}
+
 		for _, testCaseName := range testCases {
-			gh.Include = append(gh.Include, TestSuitePair{
-				Test:  testCaseName,
-				Suite: testSuiteName,
+			gh.Include = append(gh.Include, TestSuiteValues{
+				Test:   testCaseName,
+				Suite:  testSuiteName,
+				Binary: binary,
 			})
 		}
 	}

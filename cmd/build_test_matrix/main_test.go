@@ -31,7 +31,7 @@ func TestGetGithubActionMatrixForTests(t *testing.T) {
 		assert.NoError(t, err)
 
 		expected := GithubActionTestMatrix{
-			Include: []TestSuitePair{
+			Include: []TestSuiteValues{
 				{
 					Suite: "TestFeeMiddlewareTestSuite",
 					Test:  "TestA",
@@ -54,7 +54,7 @@ func TestGetGithubActionMatrixForTests(t *testing.T) {
 		assert.NoError(t, err)
 
 		expected := GithubActionTestMatrix{
-			Include: []TestSuitePair{
+			Include: []TestSuiteValues{
 				{
 					Suite: "TestTransferTestSuite",
 					Test:  "TestC",

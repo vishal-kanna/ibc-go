@@ -1,5 +1,3 @@
-//go:build icad
-
 package e2e
 
 import (
@@ -21,14 +19,13 @@ import (
 	"github.com/cosmos/ibc-go/e2e/testvalues"
 )
 
+const icadBinary = "icad"
+
 func init() {
 	// TODO: remove these, they should be set external to the tests.
-	os.Setenv("CHAIN_A_SIMD_IMAGE", "ghcr.io/cosmos/ibc-go-icad")
-	os.Setenv("CHAIN_A_SIMD_TAG", "v0.3.0")
-	os.Setenv("CHAIN_B_SIMD_IMAGE", "ghcr.io/cosmos/ibc-go-icad")
-	os.Setenv("CHAIN_B_SIMD_TAG", "v0.3.0")
-	os.Setenv("CHAIN_A_BINARY", "icad")
-	os.Setenv("CHAIN_B_BINARY", "icad")
+	//os.Setenv("CHAIN_A_TAG", "v0.3.0")
+	//os.Setenv("CHAIN_B_TAG", "v0.3.0")
+	//os.Setenv("CHAIN_BINARY", "icad")
 }
 
 func TestInterchainAccountsTestSuite(t *testing.T) {
@@ -37,6 +34,17 @@ func TestInterchainAccountsTestSuite(t *testing.T) {
 
 type InterchainAccountsTestSuite struct {
 	testsuite.E2ETestSuite
+}
+
+func (s *InterchainAccountsTestSuite) shouldSkipTest() bool {
+	// the last argument is passed via --args and is used to represent the binary.
+	// the InterchainAccountsTestSuite should not run if we are not specifying icad.
+	return os.Args[len(os.Args)-1] != icadBinary
+}
+
+func (s *InterchainAccountsTestSuite) TestFoo() {
+	args := os.Args
+	fmt.Println(args)
 }
 
 // RegisterICA will attempt to register an interchain account on the counterparty chain.
@@ -52,6 +60,11 @@ func (s *InterchainAccountsTestSuite) RegisterICA(ctx context.Context, chain *co
 // make e2e-test test=TestInterchainAccounts suite=InterchainAccountsTestSuite
 func (s *InterchainAccountsTestSuite) TestInterchainAccounts() {
 	t := s.T()
+
+	if s.shouldSkipTest() {
+		t.Skip("skipping test")
+	}
+
 	ctx := context.TODO()
 
 	relayer, channelA := s.SetupChainsRelayerAndChannel(ctx)
