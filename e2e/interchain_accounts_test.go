@@ -1,3 +1,5 @@
+//go:build icad
+
 package e2e
 
 import (
@@ -7,7 +9,6 @@ import (
 	"testing"
 
 	ibctest "github.com/strangelove-ventures/ibctest"
-	test "github.com/strangelove-ventures/ibctest/test"
 	"github.com/strangelove-ventures/ibctest/chain/cosmos"
 	"github.com/strangelove-ventures/ibctest/ibc"
 	"github.com/stretchr/testify/suite"
@@ -82,7 +83,7 @@ func (s *InterchainAccountsTestSuite) TestInterchainAccounts() {
 		s.Require().NoError(err)
 		s.Require().Equal(len(channels), 2)
 		fmt.Printf("$$$$$$$$$$$$$%v$$$$$$$$$$$$$$", channels)
-	
+
 	})
 
 	// TODO: RegisterICA should return account addr
