@@ -11,6 +11,5 @@ jobs:
       - name: Run Tests
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cd e2e
-          make compatibility-tests
+        run: gh workflow run "e2e-manual-simd.yaml" -f chain-a-tag="main" -f chain-b-tag="main" -f test-entry-point="TestTransferTestSuite"
+
