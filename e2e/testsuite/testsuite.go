@@ -402,15 +402,8 @@ func (s *E2ETestSuite) createCosmosChains(chainOptions testconfig.ChainOptions) 
 // getValidatorsAndFullNodes returns the number of validators and full nodes which should be used
 // for the given chain config.
 func getValidatorsAndFullNodes(chainOptions testconfig.ChainOptions) (int, int) {
-	// TODO: the icad tests are failing with a larger number of validators.
-	// this function can be removed once https://github.com/cosmos/ibc-go/issues/2104 is resolved.
 	numValidators := 4
 	numFullNodes := 1
-	isIcadImage := strings.Contains(chainOptions.ChainAConfig.Images[0].Repository, "icad")
-	if isIcadImage {
-		numValidators = 1
-		numFullNodes = 0
-	}
 	return numValidators, numFullNodes
 }
 
