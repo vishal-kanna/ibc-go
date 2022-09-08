@@ -67,7 +67,7 @@ func (s *IncentivizedTransferTestSuite) TestMsgPayPacketFee_AsyncSingleSender_Su
 	})
 
 	walletAmount := ibc.WalletAmount{
-		Address: chainAWallet.Bech32Address(chainB.Config().Bech32Prefix), // destination address
+		Address: receiver, // destination address
 		Denom:   chainADenom,
 		Amount:  testvalues.IBCTransferAmount,
 	}
