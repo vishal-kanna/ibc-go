@@ -10,7 +10,10 @@ on:
         description: 'The ibc-go version to be added as a label'
         required: true
         type: string
-
+      release-branch:
+        description: 'The ibc-go version to be added as a label'
+        required: true
+        type: string
 env:
    REGISTRY: ghcr.io
    ORG: cosmos
@@ -31,6 +34,8 @@ jobs:
               registry: ${{ env.REGISTRY }}
               username: ${{ github.actor }}
               password: ${{ secrets.GITHUB_TOKEN }}
+         - name: Fetch latest Dockerfile
+           run: curl "https://raw.githubusercontent.com/cosmos/ibc-go/{{ inputs.release-branch }}/Dockerfile" -o Dockerfile
          - name: Build image
            run: |
             # remove any `/` characters from the docker tag and replace them with a -
