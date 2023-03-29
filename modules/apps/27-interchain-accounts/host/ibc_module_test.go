@@ -10,8 +10,10 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/suite"
 
+	icahost "github.com/cosmos/ibc-go/v4/modules/apps/27-interchain-accounts/host"
 	"github.com/cosmos/ibc-go/v4/modules/apps/27-interchain-accounts/host/types"
 	icatypes "github.com/cosmos/ibc-go/v4/modules/apps/27-interchain-accounts/types"
+	feetypes "github.com/cosmos/ibc-go/v4/modules/apps/29-fee/types"
 	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v4/modules/core/04-channel/types"
 	host "github.com/cosmos/ibc-go/v4/modules/core/24-host"
@@ -700,6 +702,23 @@ func (suite *InterchainAccountsTestSuite) TestControlAccountAfterChannelClose() 
 	suite.Require().NoError(err) // relay committed
 
 	suite.assertBalance(icaAddr, expBalAfterSecondSend)
+}
+
+func (suite *InterchainAccountsTestSuite) TestUnmarshalPacketData() {
+	expPacketData := icatypes.InterchainAccountPacketData{
+		Type: icatypes.EXECUTE_TX,
+		Data: []byte("data"),
+		Memo: `{"callbacks": {"src_callback_address": "testAddr"}}`,
+	}
+
+	packetData, err := icahost.IBCModule{}.UnmarshalPacketData(expPacketData.GetBytes())
+	suite.Require().NoError(err)
+	suite.Require().Equal(expPacketData, packetData)
+
+	invalidPacketData := []byte("invalid packet data")
+	packetData, err = icahost.IBCModule{}.UnmarshalPacketData(invalidPacketData)
+	suite.Require().Error(err)
+	suite.Require().Nil(packetData)
 }
 
 // assertBalance asserts that the provided address has exactly the expected balance.

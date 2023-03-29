@@ -29,8 +29,6 @@ import (
 var (
 	_ module.AppModule      = AppModule{}
 	_ module.AppModuleBasic = AppModuleBasic{}
-
-	_ porttypes.IBCModule = host.IBCModule{}
 )
 
 // AppModuleBasic is the IBC interchain accounts AppModuleBasic

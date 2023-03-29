@@ -712,3 +712,20 @@ func (suite *InterchainAccountsTestSuite) TestGetAppVersion() {
 	suite.Require().True(found)
 	suite.Require().Equal(path.EndpointA.ChannelConfig.Version, appVersion)
 }
+
+func (suite *InterchainAccountsTestSuite) TestUnmarshalPacketData() {
+	expPacketData := icatypes.InterchainAccountPacketData{
+		Type: icatypes.EXECUTE_TX,
+		Data: []byte("data"),
+		Memo: `{"callbacks": {"src_callback_address": "testAddr"}}`,
+	}
+
+	packetData, err := controller.IBCMiddleware{}.UnmarshalPacketData(expPacketData.GetBytes())
+	suite.Require().NoError(err)
+	suite.Require().Equal(expPacketData, packetData)
+
+	invalidPacketData := []byte("invalid packet data")
+	packetData, err = controller.IBCMiddleware{}.UnmarshalPacketData(invalidPacketData)
+	suite.Require().Error(err)
+	suite.Require().Nil(packetData)
+}
