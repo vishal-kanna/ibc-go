@@ -8,6 +8,7 @@ import (
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
 	"github.com/stretchr/testify/suite"
 
+	"github.com/cosmos/ibc-go/v4/modules/apps/27-interchain-accounts/controller"
 	"github.com/cosmos/ibc-go/v4/modules/apps/27-interchain-accounts/controller/types"
 	icatypes "github.com/cosmos/ibc-go/v4/modules/apps/27-interchain-accounts/types"
 	fee "github.com/cosmos/ibc-go/v4/modules/apps/29-fee"
