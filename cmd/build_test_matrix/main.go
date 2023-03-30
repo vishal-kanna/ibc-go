@@ -24,6 +24,8 @@ const (
 	testExclusionsEnv = "TEST_EXCLUSIONS"
 	// testNameEnv if provided returns a single test entry so that only one test is actually run.
 	testNameEnv = "TEST_NAME"
+	// annotationPrefix should be added as a comment above a function to add metadata.
+	annotationPrefix = "// @"
 )
 
 // GithubActionTestMatrix represents
@@ -105,7 +107,7 @@ func getGithubActionMatrixForTests(e2eRootDirectory, testName string, suite stri
 			return nil
 		}
 
-		f, err := parser.ParseFile(fset, path, nil, 0)
+		f, err := parser.ParseFile(fset, path, nil, parser.ParseComments)
 		if err != nil {
 			return fmt.Errorf("failed parsing file: %s", err)
 		}
@@ -174,6 +176,15 @@ func extractSuiteAndTestNames(file *ast.File) (string, []string, error) {
 				continue
 			}
 			if isTestFunction(f) {
+				var metadataComments []string
+				if f.Doc != nil {
+					for _, comment := range f.Doc.List {
+						commentText := strings.TrimLeft(comment.Text, " ")
+						if strings.HasPrefix(commentText, annotationPrefix) {
+							metadataComments = append(metadataComments, commentText)
+						}
+					}
+				}
 				testCases = append(testCases, functionName)
 			}
 		}

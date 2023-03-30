@@ -59,6 +59,7 @@ func (s *TransferTestSuite) QueryTransferReceiveEnabledParam(ctx context.Context
 // TestMsgTransfer_Succeeds_Nonincentivized will test sending successful IBC transfers from chainA to chainB.
 // The transfer will occur over a basic transfer channel (non incentivized) and both native and non-native tokens
 // will be sent forwards and backwards in the IBC transfer timeline (both chains will act as source and receiver chains).
+// @foo
 func (s *TransferTestSuite) TestMsgTransfer_Succeeds_Nonincentivized() {
 	t := s.T()
 	ctx := context.TODO()
