@@ -21,7 +21,7 @@ func (k Keeper) escrowPacketFee(ctx sdk.Context, packetID channeltypes.PacketId,
 
 	refundAcc := k.authKeeper.GetAccount(ctx, refundAddr)
 	if refundAcc == nil {
-		return errorsmod.Wrapf(types.ErrRefundAccNotFound, "account with address: %s not found", packetFee.RefundAddress)
+		return errorsmod.Wrapf(types.ErrRefundAccNotFound, "account with address %s not found", packetFee.RefundAddress)
 	}
 
 	coins := packetFee.Fee.Total()

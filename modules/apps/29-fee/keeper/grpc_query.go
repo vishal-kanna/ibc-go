@@ -57,7 +57,7 @@ func (k Keeper) IncentivizedPacket(goCtx context.Context, req *types.QueryIncent
 	if !exists {
 		return nil, status.Error(
 			codes.NotFound,
-			errorsmod.Wrapf(types.ErrFeeNotFound, "channel: %s, port: %s, sequence: %d", req.PacketId.ChannelId, req.PacketId.PortId, req.PacketId.Sequence).Error())
+			errorsmod.Wrapf(types.ErrFeeNotFound, "channel ID %s, port ID %s, sequence %d", req.PacketId.ChannelId, req.PacketId.PortId, req.PacketId.Sequence).Error())
 	}
 
 	return &types.QueryIncentivizedPacketResponse{
@@ -107,7 +107,7 @@ func (k Keeper) TotalRecvFees(goCtx context.Context, req *types.QueryTotalRecvFe
 	if !found {
 		return nil, status.Errorf(
 			codes.NotFound,
-			errorsmod.Wrapf(types.ErrFeeNotFound, "channel: %s, port: %s, sequence: %d", req.PacketId.ChannelId, req.PacketId.PortId, req.PacketId.Sequence).Error(),
+			errorsmod.Wrapf(types.ErrFeeNotFound, "channel ID %s, port ID %s, sequence %d", req.PacketId.ChannelId, req.PacketId.PortId, req.PacketId.Sequence).Error(),
 		)
 	}
 
@@ -133,7 +133,7 @@ func (k Keeper) TotalAckFees(goCtx context.Context, req *types.QueryTotalAckFees
 	if !found {
 		return nil, status.Errorf(
 			codes.NotFound,
-			errorsmod.Wrapf(types.ErrFeeNotFound, "channel: %s, port: %s, sequence: %d", req.PacketId.ChannelId, req.PacketId.PortId, req.PacketId.Sequence).Error(),
+			errorsmod.Wrapf(types.ErrFeeNotFound, "channel ID %s, port ID %s, sequence %d", req.PacketId.ChannelId, req.PacketId.PortId, req.PacketId.Sequence).Error(),
 		)
 	}
 
@@ -159,7 +159,7 @@ func (k Keeper) TotalTimeoutFees(goCtx context.Context, req *types.QueryTotalTim
 	if !found {
 		return nil, status.Errorf(
 			codes.NotFound,
-			errorsmod.Wrapf(types.ErrFeeNotFound, "channel: %s, port: %s, sequence: %d", req.PacketId.ChannelId, req.PacketId.PortId, req.PacketId.Sequence).Error(),
+			errorsmod.Wrapf(types.ErrFeeNotFound, "channel ID %s, port ID %s, sequence %d", req.PacketId.ChannelId, req.PacketId.PortId, req.PacketId.Sequence).Error(),
 		)
 	}
 

@@ -54,16 +54,16 @@ func (k Keeper) registerInterchainAccount(ctx sdk.Context, connectionID, portID,
 	// if there is an active channel for this portID / connectionID return an error
 	activeChannelID, found := k.GetOpenActiveChannel(ctx, connectionID, portID)
 	if found {
-		return "", errorsmod.Wrapf(icatypes.ErrActiveChannelAlreadySet, "existing active channel %s for portID %s on connection %s", activeChannelID, portID, connectionID)
+		return "", errorsmod.Wrapf(icatypes.ErrActiveChannelAlreadySet, "existing active channel ID %s for port ID %s on connection ID %s", activeChannelID, portID, connectionID)
 	}
 
 	switch {
 	case k.portKeeper.IsBound(ctx, portID) && !k.HasCapability(ctx, portID):
-		return "", errorsmod.Wrapf(icatypes.ErrPortAlreadyBound, "another module has claimed capability for and bound port with portID: %s", portID)
+		return "", errorsmod.Wrapf(icatypes.ErrPortAlreadyBound, "another module has claimed capability for and bound port with port ID: %s", portID)
 	case !k.portKeeper.IsBound(ctx, portID):
 		capability := k.BindPort(ctx, portID)
 		if err := k.ClaimCapability(ctx, capability, host.PortPath(portID)); err != nil {
-			return "", errorsmod.Wrapf(err, "unable to bind to newly generated portID: %s", portID)
+			return "", errorsmod.Wrapf(err, "unable to bind to newly generated port ID: %s", portID)
 		}
 	}
 

@@ -27,7 +27,7 @@ func (k Keeper) OnChanOpenTry(
 	counterpartyVersion string,
 ) (string, error) {
 	if order != channeltypes.ORDERED {
-		return "", errorsmod.Wrapf(channeltypes.ErrInvalidChannelOrdering, "expected %s channel, got %s", channeltypes.ORDERED, order)
+		return "", errorsmod.Wrapf(channeltypes.ErrInvalidChannelOrdering, "expected %s, got %s", channeltypes.ORDERED, order)
 	}
 
 	if portID != icatypes.HostPortID {
@@ -51,7 +51,7 @@ func (k Keeper) OnChanOpenTry(
 		}
 
 		if channel.State == channeltypes.OPEN {
-			return "", errorsmod.Wrapf(icatypes.ErrActiveChannelAlreadySet, "existing active channel %s for portID %s is already OPEN", activeChannelID, portID)
+			return "", errorsmod.Wrapf(icatypes.ErrActiveChannelAlreadySet, "existing active channel ID %s for port ID %s is already OPEN", activeChannelID, portID, channeltypes.OPEN)
 		}
 
 		appVersion, found := k.GetAppVersion(ctx, portID, activeChannelID)
@@ -67,7 +67,7 @@ func (k Keeper) OnChanOpenTry(
 	// On the host chain the capability may only be claimed during the OnChanOpenTry
 	// The capability being claimed in OpenInit is for a controller chain (the port is different)
 	if err := k.ClaimCapability(ctx, chanCap, host.ChannelCapabilityPath(portID, channelID)); err != nil {
-		return "", errorsmod.Wrapf(err, "failed to claim capability for channel %s on port %s", channelID, portID)
+		return "", errorsmod.Wrapf(err, "failed to claim capability for channel ID %s on port ID %s", channelID, portID)
 	}
 
 	var (
@@ -81,7 +81,7 @@ func (k Keeper) OnChanOpenTry(
 		k.Logger(ctx).Info("reopening existing interchain account", "address", interchainAccAddr)
 		accAddress = sdk.MustAccAddressFromBech32(interchainAccAddr)
 		if _, ok := k.accountKeeper.GetAccount(ctx, accAddress).(*icatypes.InterchainAccount); !ok {
-			return "", errorsmod.Wrapf(icatypes.ErrInvalidAccountReopening, "existing account address %s, does not have interchain account type", accAddress)
+			return "", errorsmod.Wrapf(icatypes.ErrInvalidAccountReopening, "existing account address %s does not have interchain account type", accAddress)
 		}
 
 	} else {
@@ -109,7 +109,7 @@ func (k Keeper) OnChanOpenConfirm(
 ) error {
 	channel, found := k.channelKeeper.GetChannel(ctx, portID, channelID)
 	if !found {
-		return errorsmod.Wrapf(channeltypes.ErrChannelNotFound, "failed to retrieve channel %s on port %s", channelID, portID)
+		return errorsmod.Wrapf(channeltypes.ErrChannelNotFound, "failed to retrieve channel ID %s on port ID %s", channelID, portID)
 	}
 
 	// It is assumed the controller chain will not allow multiple active channels to be created for the same connectionID/portID

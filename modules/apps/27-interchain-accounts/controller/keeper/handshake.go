@@ -30,7 +30,7 @@ func (k Keeper) OnChanOpenInit(
 	version string,
 ) (string, error) {
 	if order != channeltypes.ORDERED {
-		return "", errorsmod.Wrapf(channeltypes.ErrInvalidChannelOrdering, "expected %s channel, got %s", channeltypes.ORDERED, order)
+		return "", errorsmod.Wrapf(channeltypes.ErrInvalidChannelOrdering, "expected %s, got %s", channeltypes.ORDERED, order)
 	}
 
 	if !strings.HasPrefix(portID, icatypes.ControllerPortPrefix) {
@@ -67,7 +67,7 @@ func (k Keeper) OnChanOpenInit(
 		}
 
 		if channel.State == channeltypes.OPEN {
-			return "", errorsmod.Wrapf(icatypes.ErrActiveChannelAlreadySet, "existing active channel %s for portID %s is already OPEN", activeChannelID, portID)
+			return "", errorsmod.Wrapf(icatypes.ErrActiveChannelAlreadySet, "existing active channel ID %s for port ID %s is already %s", activeChannelID, portID, channeltypes.OPEN)
 		}
 
 		appVersion, found := k.GetAppVersion(ctx, portID, activeChannelID)
@@ -92,7 +92,7 @@ func (k Keeper) OnChanOpenAck(
 	counterpartyVersion string,
 ) error {
 	if portID == icatypes.HostPortID {
-		return errorsmod.Wrapf(icatypes.ErrInvalidControllerPort, "portID cannot be host chain port ID: %s", icatypes.HostPortID)
+		return errorsmod.Wrapf(icatypes.ErrInvalidControllerPort, "port ID %s cannot be host chain", icatypes.HostPortID)
 	}
 
 	if !strings.HasPrefix(portID, icatypes.ControllerPortPrefix) {
@@ -105,12 +105,12 @@ func (k Keeper) OnChanOpenAck(
 	}
 
 	if activeChannelID, found := k.GetOpenActiveChannel(ctx, metadata.ControllerConnectionId, portID); found {
-		return errorsmod.Wrapf(icatypes.ErrActiveChannelAlreadySet, "existing active channel %s for portID %s", activeChannelID, portID)
+		return errorsmod.Wrapf(icatypes.ErrActiveChannelAlreadySet, "existing active channel ID %s for port ID %s", activeChannelID, portID)
 	}
 
 	channel, found := k.channelKeeper.GetChannel(ctx, portID, channelID)
 	if !found {
-		return errorsmod.Wrapf(channeltypes.ErrChannelNotFound, "failed to retrieve channel %s on port %s", channelID, portID)
+		return errorsmod.Wrapf(channeltypes.ErrChannelNotFound, "failed to retrieve channel ID %s on port ID %s", channelID, portID)
 	}
 
 	if err := icatypes.ValidateControllerMetadata(ctx, k.channelKeeper, channel.ConnectionHops, metadata); err != nil {

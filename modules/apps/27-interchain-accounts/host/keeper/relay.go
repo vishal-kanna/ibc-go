@@ -88,7 +88,7 @@ func (k Keeper) executeTx(ctx sdk.Context, sourcePort, destPort, destChannel str
 func (k Keeper) authenticateTx(ctx sdk.Context, msgs []sdk.Msg, connectionID, portID string) error {
 	interchainAccountAddr, found := k.GetInterchainAccountAddress(ctx, connectionID, portID)
 	if !found {
-		return errorsmod.Wrapf(icatypes.ErrInterchainAccountNotFound, "failed to retrieve interchain account on port %s", portID)
+		return errorsmod.Wrapf(icatypes.ErrInterchainAccountNotFound, "failed to retrieve interchain account on port ID %s", portID)
 	}
 
 	allowMsgs := k.GetAllowMessages(ctx)

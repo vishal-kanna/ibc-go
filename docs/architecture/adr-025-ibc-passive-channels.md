@@ -74,7 +74,7 @@ func (am AppModule) OnAttemptChanOpenTry(
   // Require portID is the portID transfer module is bound to
   boundPort := am.keeper.GetPort(ctx)
   if boundPort != msg.PortID {
-    return nil, sdkerrors.Wrapf(porttypes.ErrInvalidPort, "invalid port: %s, expected %s", msg.PortID, boundPort)
+    return nil, sdkerrors.Wrapf(porttypes.ErrInvalidPort, "invalid port ID: expected %s, got %s", msg.boundPort, PortID)
   }
 
   // BEGIN NEW CODE

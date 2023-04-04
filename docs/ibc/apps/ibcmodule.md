@@ -112,7 +112,7 @@ func (im IBCModule) OnChanOpenAck(
   counterpartyVersion string,
 ) error {
   if counterpartyVersion != types.Version {
-    return sdkerrors.Wrapf(types.ErrInvalidVersion, "invalid counterparty version: %s, expected %s", counterpartyVersion, types.Version)
+    return sdkerrors.Wrapf(types.ErrInvalidVersion, "invalid counterparty version: expected %s, got %s", types.Version, counterpartyVersion)
   }
 
   // do custom logic
