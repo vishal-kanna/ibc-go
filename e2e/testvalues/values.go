@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/DimitrisJim/ictest/v7/ibc"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/strangelove-ventures/interchaintest/v7/ibc"
 
 	feetypes "github.com/cosmos/ibc-go/v7/modules/apps/29-fee/types"
 )
