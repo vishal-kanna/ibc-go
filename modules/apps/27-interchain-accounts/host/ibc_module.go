@@ -76,7 +76,7 @@ func (im IBCModule) OnChanOpenConfirm(
 	portID,
 	channelID string,
 ) error {
-	if !im.keeper.GetParams(ctx).HostEnabled {
+	if !im.keeper.IsHostEnabled(ctx) {
 		return types.ErrHostSubModuleDisabled
 	}
 
@@ -109,7 +109,7 @@ func (im IBCModule) OnRecvPacket(
 	_ sdk.AccAddress,
 ) ibcexported.Acknowledgement {
 	logger := im.keeper.Logger(ctx)
-	if !im.keeper.GetParams(ctx).HostEnabled {
+	if !im.keeper.IsHostEnabled(ctx) {
 		logger.Info("host submodule is disabled")
 		return channeltypes.NewErrorAcknowledgement(types.ErrHostSubModuleDisabled)
 	}
