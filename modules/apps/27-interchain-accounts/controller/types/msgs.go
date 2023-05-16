@@ -13,6 +13,8 @@ import (
 
 var _ sdk.Msg = (*MsgRegisterInterchainAccount)(nil)
 
+// var _ sdk.Msg = (*MsgUpdateParams)(nil)
+
 // NewMsgRegisterInterchainAccount creates a new instance of MsgRegisterInterchainAccount
 func NewMsgRegisterInterchainAccount(connectionID, owner, version string) *MsgRegisterInterchainAccount {
 	return &MsgRegisterInterchainAccount{

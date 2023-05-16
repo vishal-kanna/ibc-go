@@ -723,8 +723,11 @@ func (suite *KeeperTestSuite) TestOnTimeoutPacket() {
 			"successful timeout from external chain",
 			func() {
 				escrow := types.GetEscrowAddress(path.EndpointA.ChannelConfig.PortID, path.EndpointA.ChannelID)
-				trace = types.ParseDenomTrace(types.GetPrefixedDenom(path.EndpointA.ChannelConfig.PortID, path.EndpointA.ChannelID, sdk.DefaultBondDenom))
-				coin := sdk.NewCoin(trace.IBCDenom(), amount)
+				// trace := types.ParseDenomTrace(types.GetPrefixedDenom(path.EndpointA.ChannelConfig.PortID, path.EndpointA.ChannelID, sdk.DefaultBondDenom))
+				trace := types.GetIBCDenom(path.EndpointA.ChannelConfig.PortID, path.EndpointA.ChannelID, sdk.DefaultBondDenom)
+
+				coin := sdk.NewCoin(trace, amount)
+				fmt.Println("the coin is ", coin)
 				expEscrowAmount = math.ZeroInt()
 
 				// funds the escrow account to have balance
@@ -765,6 +768,7 @@ func (suite *KeeperTestSuite) TestOnTimeoutPacket() {
 		tc := tc
 
 		suite.Run(fmt.Sprintf("Case %s", tc.msg), func() {
+			fmt.Println("the trace denom is", trace.IBCDenom())
 			suite.SetupTest() // reset
 
 			path = NewTransferPath(suite.chainA, suite.chainB)
@@ -792,6 +796,7 @@ func (suite *KeeperTestSuite) TestOnTimeoutPacket() {
 				suite.Require().NoError(err)
 				suite.Require().Equal(amount.Int64(), deltaAmount.Int64(), "successful timeout did not trigger refund")
 			} else {
+				// fmt.Println("hello")
 				suite.Require().Error(err)
 			}
 		})

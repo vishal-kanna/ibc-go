@@ -46,3 +46,9 @@ func GetTransferCoin(portID, channelID, baseDenom string, amount math.Int) sdk.C
 	denomTrace := ParseDenomTrace(GetPrefixedDenom(portID, channelID, baseDenom))
 	return sdk.NewCoin(denomTrace.IBCDenom(), amount)
 }
+
+// GetIBCDenom returns the coin denomination
+func GetIBCDenom(portID, channelID, baseDenom string) string {
+	denomTrace := ParseDenomTrace(GetPrefixedDenom(portID, channelID, baseDenom))
+	return denomTrace.IBCDenom()
+}
