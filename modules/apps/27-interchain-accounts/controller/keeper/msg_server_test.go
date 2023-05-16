@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"time"
 
+	"github.com/cometbft/cometbft/crypto/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/gogoproto/proto"
@@ -13,6 +14,18 @@ import (
 	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
 	host "github.com/cosmos/ibc-go/v7/modules/core/24-host"
 	ibctesting "github.com/cosmos/ibc-go/v7/testing"
+)
+
+// define constants used for testing
+const (
+	invalidAddress = "invalid"
+)
+
+var (
+	emptyAddr string
+
+	validAuthority = sdk.AccAddress("authority").String()
+	validAddress   = sdk.AccAddress(secp256k1.GenPrivKey().PubKey().Address()).String()
 )
 
 func (suite *KeeperTestSuite) TestRegisterInterchainAccount_MsgServer() {
@@ -187,6 +200,56 @@ func (suite *KeeperTestSuite) TestSubmitTx() {
 			ctx := suite.chainA.GetContext()
 			msgServer := keeper.NewMsgServerImpl(&suite.chainA.GetSimApp().ICAControllerKeeper)
 			res, err := msgServer.SendTx(ctx, msg)
+
+			if tc.expPass {
+				suite.Require().NoError(err)
+				suite.Require().NotNil(res)
+			} else {
+				suite.Require().Error(err)
+				suite.Require().Nil(res)
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestUpdateParams() {
+	msg := types.MsgUpdateParams{}
+
+	testCases := []struct {
+		name     string
+		malleate func(authority string)
+		expPass  bool
+	}{
+		{
+			"invalid authority address",
+			func(authority string) {
+				msg.Authority = "authority"
+				msg.Params = types.DefaultParams()
+			},
+			false,
+		},
+		{
+			"success",
+			func(authority string) {
+				msg.Authority = authority
+				msg.Params = types.DefaultParams()
+			},
+			true,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
+			ICAControllerKeeper := &suite.chainA.GetSimApp().ICAControllerKeeper
+			tc.malleate(ICAControllerKeeper.GetAuthority()) // malleate mutates test data
+
+			ctx := suite.chainA.GetContext()
+			msgServer := keeper.NewMsgServerImpl(ICAControllerKeeper)
+			res, err := msgServer.UpdateParams(ctx, &msg)
 
 			if tc.expPass {
 				suite.Require().NoError(err)
